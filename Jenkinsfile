@@ -2,12 +2,12 @@
 pipeline {
    agent any
    stages {
-      stage('Checkout do Projeto') {
+      stage('Compilacao') {
          steps {
             checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'github_ssh', url: 'https://github.com/rayssa-amorim/aspnet-app.git']]])
          }
       }
-      stage('Build') {
+      stage('Deploy') {
          steps {
             bat """
                D:\\tools\\Nuget\\nuget.exe restore src\\aspnetapp.sln

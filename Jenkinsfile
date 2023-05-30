@@ -4,7 +4,7 @@ def ReleaseDir = "c:\\inetpub\\wwwroot"
 pipeline {
    agent {
       node {
-         label 'windows'
+         label 'Windows'
      }
    }
    stages {

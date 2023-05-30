@@ -8,12 +8,12 @@ pipeline {
      }
    }
    stages {
-      stage('Checkout do Projeto') {
+      stage('Checkout_app') {
          steps {
             checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/rayssa-amorim/aspnet-app.git']])
          }
       }
-      stage('Build') {
+      stage('CompilacaoDeploy_app') {
          steps {
             bat """
                D:\\tools\\Nuget\\nuget.exe restore src\\aspnetapp.sln

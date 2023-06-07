@@ -1,4 +1,6 @@
-//def ReleaseDir = "c:/inetpub/wwwroot"
+
+def ReleaseDir = "c:\\inetpub\\wwwroot"
+
 pipeline {
    agent {
       node {
@@ -23,7 +25,7 @@ pipeline {
                     userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/rayssa-amorim/aspnet-app']])
          }
       }
-      stage('Build') {
+      stage('Compilacao_Deploy_App') {
          steps {
             bat """
                D:\\tools\\Nuget\\nuget.exe restore src\\aspnetapp.sln

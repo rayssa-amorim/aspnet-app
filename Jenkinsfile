@@ -1,10 +1,26 @@
 //def ReleaseDir = "c:/inetpub/wwwroot"
 pipeline {
-   agent any
+   agent {
+      node {
+         label 'Windows'
+      }
+   }
+     options {
+	  timeout(time: 1, unit: 'DAYS')
+        //Quantos builds ele deve mostrar no histórico
+		buildDiscarder(logRotator(numToKeepStr: '3', artifactNumToKeepStr: '3')) 
+       //Pular checkout padrão
+        skipDefaultCheckout()
+      }
    stages {
-      stage('Checkout do Projeto') {
+      stage('Checkout Github') {
          steps {
-            checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'github_ssh', url: 'https://github.com/rayssa-amorim/aspnet-app.git']]])
+            checkout scmGit(
+               branches: [[name: 'master']], 
+               browser: github('https://github.com/rayssa-amorim/aspnet-app'), 
+               extensions: 
+                    [cloneOption(honorRefspec: true, noTags: true, reference: '', shallow: false), lfs(), localBranch('master')], 
+                    userRemoteConfigs: [[credentialsId: 'Github', url: 'https://github.com/rayssa-amorim/aspnet-app']])
          }
       }
       stage('Build') {
@@ -13,7 +29,7 @@ pipeline {
                D:\\tools\\Nuget\\nuget.exe restore src\\aspnetapp.sln
             """
             bat "\"${tool 'MSBuild'}\" src\\aspnetapp.sln /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /t:build /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DeleteExistingFiles=True /p:publishUrl=c:\\inetpub\\wwwroot"
+            }
          }
       }
-   }
-}
+   } 
